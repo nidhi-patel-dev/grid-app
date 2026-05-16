@@ -82,7 +82,7 @@ export default function setupSocket(app: FastifyInstance) {
 
   const io = new IOServer(app.server, {
     cors: {
-      origin: "*",
+      origin: app.config.CORS_ORIGIN,
       credentials: true,
     },
   });

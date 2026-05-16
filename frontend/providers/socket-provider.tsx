@@ -20,6 +20,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const url = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+        console.log("🔌 Socket URL:", url);
 
         // Try to recover userId from localStorage for persistence
         const savedUserId = typeof window !== 'undefined' ? localStorage.getItem('grid-user-id') : null;
@@ -51,10 +52,15 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             setConnectionStatus("disconnected");
         });
 
-        socketInstance.on("connect_error", (_error) => {
+        socketInstance.on("connect_error", (error) => {
+            console.error("❌ Socket Connection Error:", {
+                message: error.message,
+                description: (error as any).description,
+                url: url
+            });
             setConnectionStatus("disconnected");
             toast.error("Connection Error", {
-                description: "Failed to connect to the server. Retrying...",
+                description: `Failed to connect to backend. Reason: ${error.message}`,
                 id: "socket-error"
             });
         });

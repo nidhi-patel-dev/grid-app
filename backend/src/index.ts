@@ -62,6 +62,11 @@ const start = async () => {
     // Initialize sockets
     setupSocket(fastify);
 
+    // Root route for simple verification
+    fastify.get('/', async () => {
+      return { status: 'OK', message: 'Pixel Realm Backend is running' };
+    });
+
     // Deep Health Check Endpoint
     fastify.get('/health', async (_req, reply) => {
       const checks: Record<string, any> = {

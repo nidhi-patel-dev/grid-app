@@ -8,7 +8,7 @@ import { getTitle, getTimeAgo } from "../../lib/utils";
 
 export function AppSidebar() {
     const presences = useAppStore(
-        useShallow((state) => 
+        useShallow((state) =>
             Object.values(state.presences)
                 .filter(p => p.isOnline && p.userId !== state.currentUser?.id)
                 .sort((a, b) => new Date(a.joinedAt).getTime() - new Date(b.joinedAt).getTime())
@@ -19,7 +19,23 @@ export function AppSidebar() {
     const leaderboard = useAppStore((state) => state.leaderboard);
     const setLeaderboardModalOpen = useAppStore((state) => state.setLeaderboardModalOpen);
 
-    if (!currentUser) return null;
+    const connectionStatus = useAppStore(state => state.connectionStatus);
+
+    if (!currentUser) {
+        return (
+            <div className="flex h-full flex-col items-center justify-center p-6 bg-[#0d0f1a] text-zinc-500">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+                    <p className="text-xs font-medium animate-pulse">
+                        {connectionStatus === "connecting" ? "Establishing connection..." : "Waiting for session..."}
+                    </p>
+                    <p className="text-[10px] text-zinc-600 mt-2 text-center">
+                        If this takes too long, check the browser console for connection errors.
+                    </p>
+                </div>
+            </div>
+        );
+    }
     const tilesOwned = currentUserPresence?.tilesOwned ?? currentUser.ownedTilesCount ?? 0;
 
     const userRankNum = leaderboard.findIndex(e => e.userId === currentUser?.id) + 1;
@@ -35,10 +51,10 @@ export function AppSidebar() {
                 <div className="p-6 pb-4">
                     <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-4">Your Info</h3>
                     <div className="flex items-center gap-4 rounded-2xl bg-white/5 p-4 border border-white/5 shadow-inner">
-                        <UserAvatar 
-                            name={currentUser.name} 
-                            color={currentUser.color} 
-                            size="lg" 
+                        <UserAvatar
+                            name={currentUser.name}
+                            color={currentUser.color}
+                            size="lg"
                         />
                         <div className="flex-1 min-w-0">
                             <h4 className="text-sm font-bold text-white truncate">{currentUser?.name || "Alex"}</h4>
@@ -94,10 +110,10 @@ export function AppSidebar() {
                                 className="flex items-center gap-3 p-2.5 rounded-xl transition-all hover:bg-white/5 group"
                             >
                                 <span className="text-[10px] font-bold text-zinc-600 w-4">{i + 1}</span>
-                                <UserAvatar 
-                                    name={user.username} 
-                                    color={user.color} 
-                                    size="sm" 
+                                <UserAvatar
+                                    name={user.username}
+                                    color={user.color}
+                                    size="sm"
                                 />
                                 <span className="text-xs font-bold text-zinc-300 flex-1 truncate group-hover:text-white transition-colors">
                                     {user.username || `Player_${user.userId.slice(0, 4)}`}
