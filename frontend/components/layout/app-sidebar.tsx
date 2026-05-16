@@ -20,8 +20,6 @@ export function AppSidebar() {
     const setLeaderboardModalOpen = useAppStore((state) => state.setLeaderboardModalOpen);
 
     const connectionStatus = useAppStore(state => state.connectionStatus);
-    console.log(connectionStatus, "connectionStatus");
-    console.log(currentUser, "currentUser")
 
     if (!currentUser) {
         return (

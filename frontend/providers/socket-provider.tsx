@@ -20,7 +20,6 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const url = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
-        console.log("🔌 Socket URL:", url);
 
         // Try to recover userId from localStorage for persistence
         const savedUserId = typeof window !== 'undefined' ? localStorage.getItem('grid-user-id') : null;

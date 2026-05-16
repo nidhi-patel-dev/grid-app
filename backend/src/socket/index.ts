@@ -12,15 +12,13 @@ export const initializeSocket = (server: HttpServer) => {
     });
 
     io.on("connection", (socket) => {
-        console.log("User connected:", socket.id);
+
 
         socket.on("disconnect", () => {
-            console.log("User disconnected:", socket.id);
+
         });
 
         socket.on("tile:capture", (data) => {
-            console.log("Tile captured:", data);
-
             io.emit("tile:update", data);
         });
     });
