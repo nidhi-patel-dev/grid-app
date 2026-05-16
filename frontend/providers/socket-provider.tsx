@@ -126,6 +126,14 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             }));
         });
 
+        socketInstance.on("session:error", (data: { message: string, error?: string }) => {
+            console.error("❌ Session Error:", data);
+            toast.error("Session Initialization Failed", {
+                description: data.message,
+                duration: 10000,
+            });
+        });
+
         // Grid sync listener
         socketInstance.on("grid:sync", (data: { tiles: Record<string, TileData>, rows: number, cols: number }) => {
             useAppStore.getState().setGrid(data.tiles, data.rows, data.cols);

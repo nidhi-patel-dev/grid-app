@@ -234,6 +234,10 @@ export default function setupSocket(app: FastifyInstance) {
         broadcastPresence(io);
       } catch (err) {
         app.log.error({ err, socketId: socket.id }, 'Error during session setup');
+        socket.emit('session:error', { 
+          message: 'Failed to initialize session. This usually indicates a database or redis connection issue on the server.',
+          error: err instanceof Error ? err.message : 'Unknown error'
+        });
       }
     })();
 
